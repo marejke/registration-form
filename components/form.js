@@ -15,14 +15,17 @@ const Label = styled.label`
 
 export default class RegistrationForm extends Component {
 
-	storeValueToState(fieldName, value) {
-		console.log(fieldName, value);
-		this.setState({ [fieldName]: value });
+	generateFieldUpdater(fieldName) {
+		return (e) => {
+			this.setState({
+				[fieldName]: e.target.value
+			});
+		};
 	}
 
 	constructor() {
 		super();
-		this.storeValueToState = this.storeValueToState.bind(this);
+		this.generateFieldUpdater = this.generateFieldUpdater.bind(this);
 	}
 
 	render() {
@@ -31,14 +34,14 @@ export default class RegistrationForm extends Component {
 				<FormWrapper>
 					<Label htmlFor={'first-name'}>First Name</Label>
 					<Input
-						onKeyUp={(e) => this.storeValueToState('firstName', e.target.value)}
+						onKeyUp={this.generateFieldUpdater('firstName')}
 						type={'text'}
 						id={'first-name'}
 						placeholder={'Please insert your first name'}
 					/>
 					<Label htmlFor={'last-name'}>Last Name</Label>
 					<Input
-						onKeyUp={(e) => this.storeValueToState('lastName', e.target.value)}
+						onKeyUp={this.generateFieldUpdater('lastName')}
 						type={'text'}
 						id={'last-name'}
 						placeholder={'Please insert your first name'}
