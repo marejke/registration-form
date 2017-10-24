@@ -17,14 +17,33 @@ export default class RegistrationForm extends Component {
 
 	generateFieldUpdater(fieldName) {
 		return (e) => {
+			const value = e.target.value;
+			const errors = this.state.errors;
+			if (['firstName', 'lastName'].includes(fieldName) && !value.match(/^[a-zA-Z]+$/)) {
+				errors[fieldName] = 'Your name is invalid';
+				this.setState({ errors });
+				return;
+			}
+			delete errors[fieldName];
 			this.setState({
-				[fieldName]: e.target.value
+				fields: {
+					...this.state.fields,
+					[fieldName]: e.target.value
+				},
+				errors
 			});
 		};
 	}
 
 	constructor() {
 		super();
+		this.state = {
+			errors: {},
+			fields: {
+				firstName: '',
+				lastName: ''
+			}
+		}
 		this.generateFieldUpdater = this.generateFieldUpdater.bind(this);
 	}
 
@@ -39,6 +58,7 @@ export default class RegistrationForm extends Component {
 						id={'first-name'}
 						placeholder={'Please insert your first name'}
 					/>
+					<p>{this.state.errors.firstName}</p>
 					<Label htmlFor={'last-name'}>Last Name</Label>
 					<Input
 						onKeyUp={this.generateFieldUpdater('lastName')}
@@ -46,8 +66,7 @@ export default class RegistrationForm extends Component {
 						id={'last-name'}
 						placeholder={'Please insert your first name'}
 					/>
-					<p>{this.state.firstName}</p>
-					<p>{this.state.lastName}</p>
+					<p>{this.state.errors.lastName}</p>
 
 				</FormWrapper>
 			</div>
