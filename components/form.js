@@ -1,24 +1,54 @@
 import { Component } from 'preact';
 import styled from 'styled-components';
 import debounce from 'lodash.debounce';
+import swal from 'sweetalert';
+
+const Header = styled.div`
+display: fixed;
+top: 0;
+padding: 0.5em;
+background-color: #3bb5ef;
+max-width: 30em;
+color: #fff;
+`
 
 const FormWrapper = styled.div`
 display: flex;
 flex-direction: column;
-padding: 2rem;
+padding: 2em;
+background-color: #fff;
+max-width: 30em;
 `
 
 const Input = styled.input`
+border-radius: 4px;
+padding: 0.5em;
+outline: none;
 `
 
 const Label = styled.label`
+padding-bottom: 0.5em;
 `
 
 const Button = styled.button`
+background-color: #3bb5ef;
+border: none;
+color: #fff;
+border-radius: 4px;
+padding: 15px 32px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 14px;
+text-transform: uppercase;
 `
 
 const Error = styled.p`
 color: red;
+`
+
+const TermsConditions = styled.div`
+padding-bottom: 1em;
 `
 
 export default class RegistrationForm extends Component {
@@ -75,7 +105,10 @@ export default class RegistrationForm extends Component {
 			});
 
 			if (Object.keys(errors).length === 0) {
-				alert('Your registration was successful.');
+				swal({
+					text: 'Your registration was successful.',
+					icon: 'success'
+				});
 			}
 		};
 	}
@@ -98,12 +131,18 @@ export default class RegistrationForm extends Component {
 	render() {
 		return (
 			<div>
+				<Header>Create Your Free Account</Header>
 				<FormWrapper>
 					<Label htmlFor={'first-name'}>First Name</Label>
 					<Input
 						onKeyUp={this.generateFieldUpdater('firstName')}
 						type={'text'}
 						id={'first-name'}
+						className={
+							this.state.errors.firstName
+								? 'input-error'
+								: 'input'
+						}
 						placeholder={'Please insert your first name'}
 					/>
 					<Error>{this.state.errors.firstName}</Error>
@@ -113,6 +152,11 @@ export default class RegistrationForm extends Component {
 						onKeyUp={this.generateFieldUpdater('lastName')}
 						type={'text'}
 						id={'last-name'}
+						className={
+							this.state.errors.lastName
+								? 'input-error'
+								: 'input'
+						}
 						placeholder={'Please insert your last name'}
 					/>
 					<Error>{this.state.errors.lastName}</Error>
@@ -122,6 +166,11 @@ export default class RegistrationForm extends Component {
 						onKeyUp={this.generateFieldUpdater('userName')}
 						type={'text'}
 						id={'user-name'}
+						className={
+							this.state.errors.userName
+								? 'input-error'
+								: 'input'
+						}
 						placeholder={'Please insert a username'}
 					/>
 					<Error>{this.state.errors.userName}</Error>
@@ -131,6 +180,11 @@ export default class RegistrationForm extends Component {
 						onKeyUp={debounce(this.generateFieldUpdater('password'), 2000)}
 						type={'password'}
 						id={'password'}
+						className={
+							this.state.errors.password
+								? 'input-error'
+								: 'input'
+						}
 						placeholder={'Please insert a password'}
 					/>
 					<Error>{this.state.errors.password}</Error>
@@ -140,10 +194,16 @@ export default class RegistrationForm extends Component {
 						onKeyUp={debounce(this.generateFieldUpdater('email'), 2000)}
 						type={'email'}
 						id={'email'}
+						className={
+							this.state.errors.email
+								? 'input-error'
+								: 'input'
+						}
 						placeholder={'Please insert your email address'}
 					/>
 					<Error>{this.state.errors.email}</Error>
 
+					<TermsConditions>By clicking submit, I agree that I have read and accepted the <a href="#">Terms and Conditions</a></TermsConditions>
 
 					<Button type={'submit'} onClick={this.submitForm()}>
 						Submit

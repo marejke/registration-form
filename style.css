@@ -1,8 +1,28 @@
 html, body {
 	font: 14px/1.21 'Helvetica Neue', arial, sans-serif;
 	font-weight: 400;
+	background-color: #efefef;
 }
 
 h1 {
 	text-align: center;
+}
+
+a {
+	color: #0681bb;
+}
+
+.input {
+	background-color: #efefef;
+	border: 1px solid #d7d7d7;
+}
+
+.input-error {
+	background-color: #fff2f2;
+	border: 1px solid #eac7c7;
+}
+
+.swal-button {
+	background-color: #3bb5ef;
+	border-radius: 4px;
 }
