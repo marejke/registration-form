@@ -1,34 +1,42 @@
 import { Component } from 'preact';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import debounce from 'lodash.debounce';
 import swal from 'sweetalert';
+import propTypes from 'propTypes';
+
+const Wrapper = styled.div`
+max-width: 400px;
+margin: 0 auto;
+`;
 
 const Header = styled.div`
-display: fixed;
 top: 0;
 padding: 0.5em;
 background-color: #3bb5ef;
-max-width: 30em;
 color: #fff;
-`
+`;
 
 const FormWrapper = styled.div`
 display: flex;
 flex-direction: column;
 padding: 2em;
 background-color: #fff;
-max-width: 30em;
-`
+`;
 
 const Input = styled.input`
 border-radius: 4px;
 padding: 0.5em;
 outline: none;
-`
+background-color: #efefef;
+border: 1px solid #d7d7d7;
+${props => props.hasError && css`
+background-color: #fff2f2;
+border: 1px solid #eac7c7;`}
+`;
 
 const Label = styled.label`
 padding-bottom: 0.5em;
-`
+`;
 
 const Button = styled.button`
 background-color: #3bb5ef;
@@ -41,15 +49,15 @@ text-decoration: none;
 display: inline-block;
 font-size: 14px;
 text-transform: uppercase;
-`
+`;
 
 const Error = styled.p`
 color: red;
-`
+`;
 
 const TermsConditions = styled.div`
 padding-bottom: 1em;
-`
+`;
 
 export default class RegistrationForm extends Component {
 
@@ -57,28 +65,28 @@ export default class RegistrationForm extends Component {
 		return (e) => {
 			const value = e.target.value;
 			const errors = this.state.errors;
+			delete errors[fieldName];
+
 			if (['firstName', 'lastName'].includes(fieldName) && !value.match(/^[a-zA-Z]+$/)) {
 				errors[fieldName] = 'The entered name is invalid';
-				this.setState({ errors });
-				return;
 			}
 			if (fieldName === 'userName' && !value.match(/^[a-z0-9._]+$/)) {
 				errors[fieldName] = 'The entered username is invalid';
-				this.setState({ errors });
-				return;
 			}
 			if (fieldName === 'password' && value.length <= 8) {
 				errors[fieldName] = 'The entered password is too short';
-				this.setState({ errors });
-				return;
 			}
-			if (fieldName === 'email' && !value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+			if (fieldName === 'email' && !value.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
 				errors[fieldName] = 'The entered email address is invalid';
-				this.setState({ errors });
+			}
+
+			if (Object.keys(errors).length === 0) {
+				this.setState({
+					errors
+				});
 				return;
 			}
 
-			delete errors[fieldName];
 			this.setState({
 				fields: {
 					...this.state.fields,
@@ -86,6 +94,7 @@ export default class RegistrationForm extends Component {
 				},
 				errors
 			});
+
 		};
 	}
 
@@ -110,6 +119,7 @@ export default class RegistrationForm extends Component {
 					icon: 'success'
 				});
 			}
+
 		};
 	}
 
@@ -131,86 +141,72 @@ export default class RegistrationForm extends Component {
 	render() {
 		return (
 			<div>
-				<Header>Create Your Free Account</Header>
-				<FormWrapper>
-					<Label htmlFor={'first-name'}>First Name</Label>
-					<Input
-						onKeyUp={this.generateFieldUpdater('firstName')}
-						type={'text'}
-						id={'first-name'}
-						className={
-							this.state.errors.firstName
-								? 'input-error'
-								: 'input'
-						}
-						placeholder={'Please insert your first name'}
-					/>
-					<Error>{this.state.errors.firstName}</Error>
+				<Wrapper>
+					<Header>Create Your Free Account</Header>
+					<FormWrapper>
+						<Label htmlFor={'first-name'}>First Name</Label>
+						<Input
+							onChange={debounce(this.generateFieldUpdater('firstName'), 300)}
+							type={'text'}
+							id={'first-name'}
+							hasError={this.state.errors.firstName}
+							placeholder={'Please insert your first name'}
+						/>
+						<Error>{this.state.errors.firstName}</Error>
 
-					<Label htmlFor={'last-name'}>Last Name</Label>
-					<Input
-						onKeyUp={this.generateFieldUpdater('lastName')}
-						type={'text'}
-						id={'last-name'}
-						className={
-							this.state.errors.lastName
-								? 'input-error'
-								: 'input'
-						}
-						placeholder={'Please insert your last name'}
-					/>
-					<Error>{this.state.errors.lastName}</Error>
+						<Label htmlFor={'last-name'}>Last Name</Label>
+						<Input
+							onChange={debounce(this.generateFieldUpdater('lastName'), 300)}
+							type={'text'}
+							id={'last-name'}
+							hasError={this.state.errors.lastName}
+							placeholder={'Please insert your last name'}
+						/>
+						<Error>{this.state.errors.lastName}</Error>
 
-					<Label htmlFor={'user-name'}>Username</Label>
-					<Input
-						onKeyUp={this.generateFieldUpdater('userName')}
-						type={'text'}
-						id={'user-name'}
-						className={
-							this.state.errors.userName
-								? 'input-error'
-								: 'input'
-						}
-						placeholder={'Please insert a username'}
-					/>
-					<Error>{this.state.errors.userName}</Error>
+						<Label htmlFor={'user-name'}>Username</Label>
+						<Input
+							onChange={debounce(this.generateFieldUpdater('userName'), 300)}
+							type={'text'}
+							id={'user-name'}
+							hasError={this.state.errors.userName}
+							placeholder={'Please insert a username'}
+						/>
+						<Error>{this.state.errors.userName}</Error>
 
-					<Label htmlFor={'password'}>Password</Label>
-					<Input
-						onKeyUp={debounce(this.generateFieldUpdater('password'), 2000)}
-						type={'password'}
-						id={'password'}
-						className={
-							this.state.errors.password
-								? 'input-error'
-								: 'input'
-						}
-						placeholder={'Please insert a password'}
-					/>
-					<Error>{this.state.errors.password}</Error>
+						<Label htmlFor={'password'}>Password</Label>
+						<Input
+							onChange={debounce(this.generateFieldUpdater('password'), 1000)}
+							type={'password'}
+							id={'password'}
+							hasError={this.state.errors.password}
+							placeholder={'Please insert a password'}
+						/>
+						<Error>{this.state.errors.password}</Error>
 
-					<Label htmlFor={'email'}>Email</Label>
-					<Input
-						onKeyUp={debounce(this.generateFieldUpdater('email'), 2000)}
-						type={'email'}
-						id={'email'}
-						className={
-							this.state.errors.email
-								? 'input-error'
-								: 'input'
-						}
-						placeholder={'Please insert your email address'}
-					/>
-					<Error>{this.state.errors.email}</Error>
+						<Label htmlFor={'email'}>Email</Label>
+						<Input
+							onChange={debounce(this.generateFieldUpdater('email'), 1000)}
+							type={'email'}
+							id={'email'}
+							hasError={this.state.errors.email}
+							placeholder={'Please insert your email address'}
+						/>
+						<Error>{this.state.errors.email}</Error>
 
-					<TermsConditions>By clicking submit, I agree that I have read and accepted the <a href="#">Terms and Conditions</a></TermsConditions>
+						<TermsConditions>By clicking submit, I agree that I have read and accepted the <a href="#">Terms and Conditions</a></TermsConditions>
 
-					<Button type={'submit'} onClick={this.submitForm()}>
-						Submit
-					</Button>
+						<Button type={'submit'} onClick={this.submitForm()}>
+							Submit
+						</Button>
 
-				</FormWrapper>
+					</FormWrapper>
+				</Wrapper>
 			</div>
 		);
 	}
 }
+
+RegistrationForm.propTypes = {
+	hasError: propTypes.object
+};
