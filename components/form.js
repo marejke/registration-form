@@ -4,6 +4,7 @@ import debounce from 'lodash.debounce';
 import swal from 'sweetalert';
 import propTypes from 'propTypes';
 
+// styled components
 const Wrapper = styled.div`
 max-width: 400px;
 margin: 0 auto;
@@ -59,8 +60,10 @@ const TermsConditions = styled.div`
 padding-bottom: 1em;
 `;
 
+// registration form component
 export default class RegistrationForm extends Component {
 
+	// validation handling for input fields
 	inputValidation(fieldName, value) {
 		const errors = this.state.errors;
 
@@ -78,6 +81,7 @@ export default class RegistrationForm extends Component {
 		}
 	}
 
+	// checks for invalid input and updates the state
 	generateFieldUpdater(fieldName) {
 		return (e) => {
 			const value = e.target.value;
@@ -104,6 +108,7 @@ export default class RegistrationForm extends Component {
 		};
 	}
 
+	// checks for invalid or empty input and adds success alert
 	submitForm() {
 		return (e) => {
 			const errors = this.state.errors;
