@@ -1,5 +1,6 @@
 import { Component } from 'preact';
 import styled from 'styled-components';
+import debounce from 'lodash.debounce';
 
 const FormWrapper = styled.div`
 display: flex;
@@ -14,6 +15,10 @@ const Label = styled.label`
 `
 
 const Button = styled.button`
+`
+
+const Error = styled.p`
+color: red;
 `
 
 export default class RegistrationForm extends Component {
@@ -32,7 +37,7 @@ export default class RegistrationForm extends Component {
 				this.setState({ errors });
 				return;
 			}
-			if (fieldName === 'password' && !value.length <= 8) {
+			if (fieldName === 'password' && value.length <= 8) {
 				errors[fieldName] = 'The entered password is too short';
 				this.setState({ errors });
 				return;
@@ -51,6 +56,27 @@ export default class RegistrationForm extends Component {
 				},
 				errors
 			});
+		};
+	}
+
+	submitForm() {
+		return (e) => {
+			const errors = this.state.errors;
+			const fields = this.state.fields;
+
+			for (const field in fields) {
+				if (fields.hasOwnProperty(field) && !fields[field].length) {
+					errors[field] = 'This field is required';
+				}
+			}
+
+			this.setState({
+				errors
+			});
+
+			if (Object.keys(errors).length === 0) {
+				alert('Your registration was successful.');
+			}
 		};
 	}
 
@@ -80,7 +106,8 @@ export default class RegistrationForm extends Component {
 						id={'first-name'}
 						placeholder={'Please insert your first name'}
 					/>
-					<p>{this.state.errors.firstName}</p>
+					<Error>{this.state.errors.firstName}</Error>
+
 					<Label htmlFor={'last-name'}>Last Name</Label>
 					<Input
 						onKeyUp={this.generateFieldUpdater('lastName')}
@@ -88,7 +115,8 @@ export default class RegistrationForm extends Component {
 						id={'last-name'}
 						placeholder={'Please insert your last name'}
 					/>
-					<p>{this.state.errors.lastName}</p>
+					<Error>{this.state.errors.lastName}</Error>
+
 					<Label htmlFor={'user-name'}>Username</Label>
 					<Input
 						onKeyUp={this.generateFieldUpdater('userName')}
@@ -96,24 +124,28 @@ export default class RegistrationForm extends Component {
 						id={'user-name'}
 						placeholder={'Please insert a username'}
 					/>
-					<p>{this.state.errors.userName}</p>
-					<Label htmlFor={'last-name'}>Password</Label>
+					<Error>{this.state.errors.userName}</Error>
+
+					<Label htmlFor={'password'}>Password</Label>
 					<Input
-						onKeyUp={this.generateFieldUpdater('password')}
+						onKeyUp={debounce(this.generateFieldUpdater('password'), 2000)}
 						type={'password'}
 						id={'password'}
 						placeholder={'Please insert a password'}
 					/>
-					<p>{this.state.errors.password}</p>
+					<Error>{this.state.errors.password}</Error>
+
 					<Label htmlFor={'email'}>Email</Label>
 					<Input
-						onKeyUp={this.generateFieldUpdater('email')}
+						onKeyUp={debounce(this.generateFieldUpdater('email'), 2000)}
 						type={'email'}
 						id={'email'}
 						placeholder={'Please insert your email address'}
 					/>
-					<p>{this.state.errors.email}</p>
-					<Button type={'submit'}>
+					<Error>{this.state.errors.email}</Error>
+
+
+					<Button type={'submit'} onClick={this.submitForm()}>
 						Submit
 					</Button>
 
