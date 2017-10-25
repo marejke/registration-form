@@ -61,24 +61,30 @@ padding-bottom: 1em;
 
 export default class RegistrationForm extends Component {
 
+	inputValidation(fieldName, value) {
+		const errors = this.state.errors;
+
+		if (['firstName', 'lastName'].includes(fieldName) && !value.match(/^[a-zA-Z]+$/)) {
+			errors[fieldName] = 'The entered name is invalid';
+		}
+		if (fieldName === 'userName' && !value.match(/^[a-z0-9._]+$/)) {
+			errors[fieldName] = 'The entered username is invalid';
+		}
+		if (fieldName === 'password' && value.length <= 8) {
+			errors[fieldName] = 'The entered password is too short';
+		}
+		if (fieldName === 'email' && !value.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+			errors[fieldName] = 'The entered email address is invalid';
+		}
+	}
+
 	generateFieldUpdater(fieldName) {
 		return (e) => {
 			const value = e.target.value;
 			const errors = this.state.errors;
 			delete errors[fieldName];
 
-			if (['firstName', 'lastName'].includes(fieldName) && !value.match(/^[a-zA-Z]+$/)) {
-				errors[fieldName] = 'The entered name is invalid';
-			}
-			if (fieldName === 'userName' && !value.match(/^[a-z0-9._]+$/)) {
-				errors[fieldName] = 'The entered username is invalid';
-			}
-			if (fieldName === 'password' && value.length <= 8) {
-				errors[fieldName] = 'The entered password is too short';
-			}
-			if (fieldName === 'email' && !value.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-				errors[fieldName] = 'The entered email address is invalid';
-			}
+			this.inputValidation(fieldName, value);
 
 			if (Object.keys(errors).length === 0) {
 				this.setState({
@@ -105,6 +111,7 @@ export default class RegistrationForm extends Component {
 
 			for (const field in fields) {
 				if (fields.hasOwnProperty(field) && !fields[field].length) {
+					this.inputValidation(field, fields[field]);
 					errors[field] = 'This field is required';
 				}
 			}
