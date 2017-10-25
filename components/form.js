@@ -20,7 +20,7 @@ color: #fff;
 const FormWrapper = styled.div`
 display: flex;
 flex-direction: column;
-padding: 2em;
+padding: 1em 2em;
 background-color: #fff;
 `;
 
@@ -36,7 +36,7 @@ border: 1px solid #eac7c7;`}
 `;
 
 const Label = styled.label`
-padding-bottom: 0.5em;
+margin: 1em 0;
 `;
 
 const Button = styled.button`
@@ -54,10 +54,23 @@ text-transform: uppercase;
 
 const Error = styled.p`
 color: red;
+margin-top: 0.5em;
+margin-bottom: 0;
+font-size: 11px;
+display: none;
+${props => props.hasError && css`
+display: block;`}
+`;
+
+const Info = styled.p`
+color: gray;
+margin-top: 0.5em;
+margin-bottom: 0;
+font-size: 11px;
 `;
 
 const TermsConditions = styled.div`
-padding-bottom: 1em;
+padding: 1em 0;
 `;
 
 // registration form component
@@ -115,9 +128,11 @@ export default class RegistrationForm extends Component {
 			const fields = this.state.fields;
 
 			for (const field in fields) {
-				if (fields.hasOwnProperty(field) && !fields[field].length) {
+				if (fields.hasOwnProperty(field)) {
 					this.inputValidation(field, fields[field]);
-					errors[field] = 'This field is required';
+					if (!fields[field].length) {
+						errors[field] = 'This field is required';
+					}
 				}
 			}
 
@@ -127,7 +142,7 @@ export default class RegistrationForm extends Component {
 
 			if (Object.keys(errors).length === 0) {
 				swal({
-					text: 'Your registration was successful.',
+					text: 'Thank You! Your registration was successful. Please check your email to activate your account.',
 					icon: 'success'
 				});
 			}
@@ -164,7 +179,9 @@ export default class RegistrationForm extends Component {
 							hasError={this.state.errors.firstName}
 							placeholder={'Please insert your first name'}
 						/>
-						<Error>{this.state.errors.firstName}</Error>
+						<Error
+							hasError={this.state.errors.firstName}
+						>{this.state.errors.firstName}</Error>
 
 						<Label htmlFor={'last-name'}>Last Name</Label>
 						<Input
@@ -174,7 +191,9 @@ export default class RegistrationForm extends Component {
 							hasError={this.state.errors.lastName}
 							placeholder={'Please insert your last name'}
 						/>
-						<Error>{this.state.errors.lastName}</Error>
+						<Error
+							hasError={this.state.errors.lastName}
+						>{this.state.errors.lastName}</Error>
 
 						<Label htmlFor={'user-name'}>Username</Label>
 						<Input
@@ -184,7 +203,9 @@ export default class RegistrationForm extends Component {
 							hasError={this.state.errors.userName}
 							placeholder={'Please insert a username'}
 						/>
-						<Error>{this.state.errors.userName}</Error>
+						<Error
+							hasError={this.state.errors.userName}
+						>{this.state.errors.userName}</Error>
 
 						<Label htmlFor={'password'}>Password</Label>
 						<Input
@@ -194,7 +215,10 @@ export default class RegistrationForm extends Component {
 							hasError={this.state.errors.password}
 							placeholder={'Please insert a password'}
 						/>
-						<Error>{this.state.errors.password}</Error>
+						<Error
+							hasError={this.state.errors.password}
+						>{this.state.errors.password}</Error>
+						<Info>{this.state.errors.password ? '' : 'At least 8 characters.'}</Info>
 
 						<Label htmlFor={'email'}>Email</Label>
 						<Input
@@ -204,7 +228,10 @@ export default class RegistrationForm extends Component {
 							hasError={this.state.errors.email}
 							placeholder={'Please insert your email address'}
 						/>
-						<Error>{this.state.errors.email}</Error>
+						<Error
+							hasError={this.state.errors.email}
+						>{this.state.errors.email}</Error>
+						<Info>{this.state.errors.email ? '' : 'An activation link will be sent to this email.'}</Info>
 
 						<TermsConditions>By clicking submit, I agree that I have read and accepted the <a href="#">Terms and Conditions</a></TermsConditions>
 
