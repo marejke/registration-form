@@ -2,7 +2,7 @@
 
 # Introduction
 
-This is a registration form developed with **PreactJS**, which I chose over **ReactJS** for this task, to have a quick setup and a small application (and I always wanted to try it out).
+This is a registration form developed with **PreactJS**, which I chose over **ReactJS** for this task, to have a quick setup and a small application.
 
 # Technical requirements
 The registration form contains 5 mandatory input fields for first name, last name, username, password and email.
