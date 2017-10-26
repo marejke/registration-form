@@ -1,6 +1,6 @@
 # registration-form
 
-# Introduction 
+# Introduction
 
 This is a registration form developed with **PreactJS**, which I chose over **ReactJS** for this task, to have a quick setup and a small application (and I always wanted to try it out).
 
@@ -20,5 +20,17 @@ Clone the repository and can install the app from within the directory with the 
 
 ```
 npm init
+```
+
+To start the app, run the following command:
+
+```
+npm start
+```
+
+To run the test, enter the following command in your console:
+
+```
+npm test
 ```
 
