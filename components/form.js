@@ -45,11 +45,17 @@ border: none;
 color: #fff;
 border-radius: 4px;
 padding: 15px 32px;
+margin-bottom: 0.5em;
 text-align: center;
 text-decoration: none;
 display: inline-block;
 font-size: 14px;
 text-transform: uppercase;
+outline: none;
+cursor: pointer;
+:hover {
+	box-shadow: 0 2px 3px 0 rgba(0,0,0,0.24), 0 1px 4px 0 rgba(0,0,0,0.19);
+}
 `;
 
 const Error = styled.p`
@@ -81,16 +87,16 @@ export default class RegistrationForm extends Component {
 		const errors = this.state.errors;
 
 		if (['firstName', 'lastName'].includes(fieldName) && !value.match(/^[a-zA-Z]+$/)) {
-			errors[fieldName] = 'The entered name is invalid';
+			errors[fieldName] = 'The entered name is invalid.';
 		}
 		if (fieldName === 'userName' && !value.match(/^[a-z0-9._]+$/)) {
-			errors[fieldName] = 'The entered username is invalid';
+			errors[fieldName] = 'The entered username is invalid.';
 		}
 		if (fieldName === 'password' && value.length <= 8) {
-			errors[fieldName] = 'The entered password is too short';
+			errors[fieldName] = 'The entered password is too short.';
 		}
-		if (fieldName === 'email' && !value.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-			errors[fieldName] = 'The entered email address is invalid';
+		if (fieldName === 'email' && !value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+			errors[fieldName] = 'The entered email address is invalid.';
 		}
 	}
 
@@ -107,7 +113,6 @@ export default class RegistrationForm extends Component {
 				this.setState({
 					errors
 				});
-				return;
 			}
 
 			this.setState({
@@ -131,7 +136,7 @@ export default class RegistrationForm extends Component {
 				if (fields.hasOwnProperty(field)) {
 					this.inputValidation(field, fields[field]);
 					if (!fields[field].length) {
-						errors[field] = 'This field is required';
+						errors[field] = 'This field is required.';
 					}
 				}
 			}
@@ -233,7 +238,7 @@ export default class RegistrationForm extends Component {
 						>{this.state.errors.email}</Error>
 						<Info>{this.state.errors.email ? '' : 'An activation link will be sent to this email.'}</Info>
 
-						<TermsConditions>By clicking submit, I agree that I have read and accepted the <a href="#">Terms and Conditions</a></TermsConditions>
+						<TermsConditions>By clicking submit, I agree that I have read and accepted the <a href="#">Terms and Conditions</a>.</TermsConditions>
 
 						<Button type={'submit'} onClick={this.submitForm()}>
 							Submit
