@@ -19,7 +19,7 @@ The registration form contains 5 mandatory input fields for first name, last nam
 Clone the repository and can install the app from within the directory with the following command:
 
 ```
-npm init
+npm install
 ```
 
 To start the app, run the following command:
