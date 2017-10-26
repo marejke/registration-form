@@ -85,6 +85,7 @@ export default class RegistrationForm extends Component {
 	// validation handling for input fields
 	inputValidation(fieldName, value) {
 		const errors = this.state.errors;
+		delete errors[fieldName];
 
 		if (['firstName', 'lastName'].includes(fieldName) && !value.match(/^[a-zA-Z]+$/)) {
 			errors[fieldName] = 'The entered name is invalid.';
@@ -98,31 +99,25 @@ export default class RegistrationForm extends Component {
 		if (fieldName === 'email' && !value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
 			errors[fieldName] = 'The entered email address is invalid.';
 		}
+
+		this.setState({
+			errors
+		});
 	}
 
 	// checks for invalid input and updates the state
 	generateFieldUpdater(fieldName) {
 		return (e) => {
 			const value = e.target.value;
-			const errors = this.state.errors;
-			delete errors[fieldName];
 
 			this.inputValidation(fieldName, value);
-
-			if (Object.keys(errors).length === 0) {
-				this.setState({
-					errors
-				});
-			}
 
 			this.setState({
 				fields: {
 					...this.state.fields,
 					[fieldName]: e.target.value
-				},
-				errors
-			});
-
+				}
+ 			});
 		};
 	}
 
@@ -140,10 +135,6 @@ export default class RegistrationForm extends Component {
 					}
 				}
 			}
-
-			this.setState({
-				errors
-			});
 
 			if (Object.keys(errors).length === 0) {
 				swal({
