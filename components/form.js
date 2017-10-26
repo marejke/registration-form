@@ -1,4 +1,4 @@
-import { Component } from 'preact';
+import { h, Component } from 'preact';
 import styled, { css } from 'styled-components';
 import debounce from 'lodash.debounce';
 import swal from 'sweetalert';
@@ -117,7 +117,7 @@ export default class RegistrationForm extends Component {
 					...this.state.fields,
 					[fieldName]: e.target.value
 				}
- 			});
+			});
 		};
 	}
 
